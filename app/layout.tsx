@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react"; //context provider that fetches the session internally and provides it to the children
+import ModalProvider from "@/providers/modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+      <body className={inter.className} suppressHydrationWarning={true}>
+        <SessionProvider>
+          <ModalProvider />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
