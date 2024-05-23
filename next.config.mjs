@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "lh3.googleusercontent.com", //dont do this in production, instead, serve images from a owned file storage
+      },
+    ],
+  },
+};
 
 export default nextConfig;
