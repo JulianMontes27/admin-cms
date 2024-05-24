@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { NextResponse } from "next/server";
+import toast from "react-hot-toast";
 
 const StoreModal = () => {
   const storeModal = useStoreModal();
@@ -38,9 +39,11 @@ const StoreModal = () => {
     try {
       //call route handler (this runs on the server)
       const res = await axios.post("/api/stores", values);
-      console.log(res.data)
+      toast.success("store created succesfully!", {
+        position: "bottom-right",
+      });
     } catch (error) {
-      return new NextResponse("Error in POST", { status: 401 });
+      toast.error("Something went wrong!");
     }
   }
   return (
