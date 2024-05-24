@@ -20,11 +20,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 const StoreModal = () => {
   const storeModal = useStoreModal();
-  const router = useRouter();
+  // const router = useRouter();
   // 1. Define your form.
   const form = useForm<CreateStore>({
     resolver: zodResolver(formSchema), //validate with zod
@@ -42,8 +41,8 @@ const StoreModal = () => {
       toast.success("store created succesfully!", {
         position: "bottom-right",
       });
-      // console.log(res.data.id)
-      router.push(`/${res.data.id}`);
+      // router.push(`/${res.data.id}`);
+      window.location.assign(`/${res.data.id}`); //full refresh
     } catch (error) {
       toast.error("Something went wrong!");
     }

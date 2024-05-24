@@ -1,9 +1,22 @@
-import React from 'react'
+import prisma from "@/lib/prisma";
 
-const DashboardPage = () => {
-  return (
-    <div>DashboardPage</div>
-  )
+interface DashboardPageProps {
+  params: { storeId: string };
 }
 
-export default DashboardPage
+const DashboardPage = async ({ params }: DashboardPageProps) => {
+  const store = await prisma.store.findFirst({
+    where: {
+      id: params.storeId,
+    },
+  });
+  return (
+    <>
+      <h1 className="flex">
+        Active store =&gt; <p>{store?.title}</p>
+      </h1>
+    </>
+  );
+};
+
+export default DashboardPage;

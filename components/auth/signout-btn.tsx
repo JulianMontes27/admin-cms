@@ -1,31 +1,24 @@
-// import { signOut } from "@/auth";
-import { signOut } from "next-auth/react";
-import { LogOut } from "lucide-react";
+import { signOut } from "@/auth";
+import { User } from "next-auth";
 import { Button } from "../ui/button";
+import { LogOut } from "lucide-react";
 
-const SignOutBtn = () => {
+const SignOutBtn = ({ user }: { user: User }) => {
   return (
-    // <form
-    //   action={async () => {
-    //     "use server";
-    //     await signOut();
-    //   }}
-    // >
-    //   <button type="submit" className="flex flex-row gap-1">
-    //     <LogOut size={15} />
-    //     Sign out
-    //   </button>
-    // </form>
-    <Button
-      onClick={() => signOut()}
-      variant={"destructive"}
-      className="flex text-sm items-center pl-2 gap-2 w-full"
+    <form
+      action={async () => {
+        "use server";
+        await signOut();
+      }}
     >
-      <span>
+      <Button
+        variant={"ghost"}
+        className="border-none flex w-full justify-start p-0 gap-2"
+      >
         <LogOut size={15} />
-      </span>
-      Sign out
-    </Button>
+        <span>Sign out</span>
+      </Button>
+    </form>
   );
 };
 

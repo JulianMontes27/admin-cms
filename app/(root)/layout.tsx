@@ -7,7 +7,7 @@ const SetupLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getSession();
   const user = session?.user;
   if (!user) {
-    redirect("/sign-in");
+    redirect("/api/auth/signin");
   }
   //check if the user has a store created, if he has at least one store, redirect to the dashboard page of the first store found, if nor, open the modal to create a store
   const store = await prisma.store.findFirst({

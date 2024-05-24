@@ -1,6 +1,7 @@
 import getSession from "@/lib/getSession";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import Navbar from "@/components/navbar";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   const session = await getSession();
   const user = session?.user;
   if (!user) {
-    redirect("/sign-in");
+    redirect("/api/auth/signin");
   }
   //load the store that matches the params' id
   const store = await prisma.store.findFirst({
@@ -29,7 +30,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   if (!store) {
     redirect("/");
   }
-  return <div>{children}</div>;
+  return (
+    <main className="container">
+      <Navbar />
+      {children}
+    </main>
+  );
 };
 
 export default DashboardLayout;
