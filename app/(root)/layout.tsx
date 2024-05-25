@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const SetupLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await getSession();
+  const session = await getSession(); //fetch session on the server
   const user = session?.user;
   if (!user) {
     redirect("/api/auth/signin");

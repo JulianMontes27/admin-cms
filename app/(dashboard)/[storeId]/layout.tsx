@@ -31,7 +31,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
     redirect("/");
   }
   return (
-    <main className="container">
+    <main className="container h-full ">
       <Navbar />
       {children}
     </main>

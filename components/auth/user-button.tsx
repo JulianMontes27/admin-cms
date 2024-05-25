@@ -1,4 +1,3 @@
-
 import { Settings } from "lucide-react";
 import { User } from "next-auth";
 import Link from "next/link";
@@ -12,12 +11,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import SignOutBtn from "./signout-btn";
+import Image from "next/image";
 
 interface UserButtonProps {
-  user: User | undefined;
+  user: User;
 }
 
 export default function UserButton({ user }: UserButtonProps) {
@@ -25,10 +24,7 @@ export default function UserButton({ user }: UserButtonProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" className="flex-none rounded-full">
-          <Avatar>
-            <AvatarImage src={user?.image} alt="@shadcn" />
-            <AvatarFallback>{user?.name}</AvatarFallback>
-          </Avatar>
+          User
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -44,7 +40,7 @@ export default function UserButton({ user }: UserButtonProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <SignOutBtn />
+          <SignOutBtn user={user} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

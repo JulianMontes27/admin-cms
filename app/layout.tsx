@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import { SessionProvider } from "next-auth/react"; //context provider that fetches the session internally and provides it to the children
+// import { SessionProvider } from "next-auth/react"; //context provider that fetches the session internally and provides it to the children
 import ModalProvider from "@/providers/modal-provider";
 import { Toaster } from "react-hot-toast";
 
@@ -21,11 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <SessionProvider>
           <ModalProvider />
           {children}
           <Toaster />
-        </SessionProvider>
       </body>
     </html>
   );

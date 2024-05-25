@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 //route handler to create a store
 export async function POST(req: NextRequest) {
   try {
-    //authenticate the POST route
+    //check if the user is authenticated
     const session = await auth();
     const userId = session?.user.id;
     if (!userId) {
@@ -27,5 +27,14 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const res = await prisma.store.findMany();
+    return NextResponse.json(res);
+  } catch (error) {
+    console.log(error);
   }
 }
