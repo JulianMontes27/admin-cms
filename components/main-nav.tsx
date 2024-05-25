@@ -4,11 +4,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 
-import { StoreCombobox } from "./store-combobox";
-import { useEffect, useState } from "react";
-import prisma from "@/lib/prisma";
-import axios from "axios";
-
 interface Route {
   href: string;
   title: string;
@@ -17,18 +12,6 @@ interface Route {
 type RouteList = Route[];
 
 const MainNav = () => {
-  const [items, setitems] = useState([]);
-  useEffect(() => {
-    const getStores = async () => {
-      const res = await axios.get("/api/stores");
-      if (!res.data) {
-        return "no data";
-      }
-      // console.log(res.data);
-      setitems(res.data);
-    };
-    getStores();
-  }, []);
   const params = useParams();
   const pathname = usePathname();
 
@@ -44,7 +27,6 @@ const MainNav = () => {
 
   return (
     <div className="flex flex-row gap-4 items-center">
-      <StoreCombobox items={items} />
       <ul>
         {routes.map((route) => (
           <Link

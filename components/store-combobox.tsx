@@ -83,10 +83,19 @@ export function StoreCombobox({ items = [] }: StoreComboboxProps) {
                 <CommandItem
                   key={route.value}
                   onSelect={() => handleSelectStore(route)}
-                  className="text-sm"
+                  className={
+                    (cn("text-sm"),
+                    currentActiveStore?.label === route.label
+                      ? "font-bold"
+                      : "")
+                  }
                 >
                   {route.label}
-                  {/* <Check size={20} /> */}
+                  {currentActiveStore?.label === route.label && (
+                    <div className="ml-auto">
+                      <Check />
+                    </div>
+                  )}
                 </CommandItem>
               ))}
             </CommandGroup>
