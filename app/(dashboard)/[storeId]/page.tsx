@@ -1,3 +1,4 @@
+import getSession from "@/lib/getSession";
 import prisma from "@/lib/prisma";
 
 interface DashboardPageProps {
@@ -10,13 +11,7 @@ const DashboardPage = async ({ params }: DashboardPageProps) => {
       id: params.storeId,
     },
   });
-  return (
-    <>
-      <h1 className="flex">
-        Active store =&gt; <p>{store?.title}</p>
-      </h1>
-    </>
-  );
+  return <div>Active store {store?.title}</div>;
 };
 
 export default DashboardPage;

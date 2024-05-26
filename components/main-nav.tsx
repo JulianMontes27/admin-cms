@@ -17,7 +17,7 @@ const MainNav = () => {
 
   const routes: RouteList = [
     {
-      href: `/${params.id}/settings`, //the settings page is dynamic, so depends on the current store id
+      href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id
       title: "Settings",
       isActive: pathname === `/${params.storeId}/settings`,
     },
