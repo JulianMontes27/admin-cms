@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: { storeId: string } }
 ) {
@@ -16,7 +16,7 @@ export async function PUT(
     const storeId = params.storeId;
     const body = await req.json();
     const { title } = body;
-    const res = await prisma.store.update({
+    const res = await prisma.store.updateMany({
       where: {
         id: storeId,
         userId: user.id,
@@ -27,7 +27,7 @@ export async function PUT(
     });
     return NextResponse.json(res);
   } catch (error) {
-    return new NextResponse("Error");
+    return new NextResponse("Error [PATCH]");
   }
 }
 
@@ -48,7 +48,7 @@ export async function DELETE(
         userId,
       },
     });
-    return NextResponse.json({ message: "Deleted store" });
+    return NextResponse.json(res);
   } catch (error) {
     return NextResponse.error();
   }

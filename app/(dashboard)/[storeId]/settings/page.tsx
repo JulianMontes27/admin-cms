@@ -1,7 +1,7 @@
 import SettingsForm from "@/components/settings-form";
 import getSession from "@/lib/getSession";
 import prisma from "@/lib/prisma";
-import { User } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 interface StoreSettingsProps {
   params: {
@@ -11,7 +11,10 @@ interface StoreSettingsProps {
 
 const StoreSettings = async ({ params }: StoreSettingsProps) => {
   const session = await getSession();
-  const user: User = session?.user;
+  const user = session?.user;
+  if (!user) {
+    redirect("/api/auth/signin");
+  }
   const store = await prisma.store.findUnique({
     where: {
       id: params.storeId,
