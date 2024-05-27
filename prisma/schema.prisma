@@ -11,7 +11,9 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
- 
+
+//run npx prisma generate so the prisma client gets updated with new models
+//then run npx prisma db push so that the Mongodb is updated
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -81,12 +83,25 @@ model Store{
   id String @id @default(uuid()) @map("_id")
   title String
   userId String
+  billboards Billboard[] @relation("StoreToBillboard")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("stores")
 }
  
+model Billboard{
+  id String @id @default(uuid()) @map("_id")
+  //relation to a store
+  storeId String
+  store Store @relation("StoreToBillboard", fields: [storeId], references: [id]) //its targeting the storeId of the Billboard to reference the Id prop of the Store 
+  label String
+  imgUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("billboards")
+} 
 // // Optional for WebAuthn support
 // model Authenticator {
 //   credentialID         String  @unique

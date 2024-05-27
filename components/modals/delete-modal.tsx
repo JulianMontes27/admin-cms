@@ -32,7 +32,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   return (
     <Modal title={title} desc={desc} isOpen={isOpen} onClose={onClose}>
       <div className="flex items-center justify-end gap-5">
-        <Button variant={"outline"} onClick={closeModal}>
+        <Button variant={"outline"} onClick={() => closeModal}>
           Cancel
         </Button>
         <Button variant={"destructive"} onClick={handleDelete}>

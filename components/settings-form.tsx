@@ -25,6 +25,8 @@ import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import DeleteModal from "@/components/modals/delete-modal";
 import { useState } from "react";
+import ApiAlert from "./api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 interface SettingsFormProps {
   user: User;
@@ -32,11 +34,14 @@ interface SettingsFormProps {
 }
 
 const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
+  const origin = useOrigin();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
   const closeModal = (open: boolean) => {
     setIsOpen(!open);
   };
-  const router = useRouter();
+
   if (!user) {
     router.push("/api/auth/signin");
   }
@@ -52,7 +57,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
   async function onSubmit(values: z.infer<typeof settingsFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const res = await axios.patch(`/api/update-settings/${store.id}`, values);
+    await axios.patch(`/api/update-settings/${store.id}`, values);
     // window.location.assign(`/${resData.id}`); //full refresh
     toast.success("Saved new title");
     router.refresh();
@@ -60,7 +65,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
   //handle delete store function
   async function onDelete() {
     await axios.delete(`/api/update-settings/${store.id}`);
-    window.location.assign("/"); //full refresh
+    router.refresh();
+    router.push("/");
   }
   return (
     <>
@@ -107,6 +113,14 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
             <Button type="submit">Submit</Button>
           </form>
         </Form>
+        <div className="border-t  mt-6  ">
+          <ApiAlert
+            title={"NEXT_PUBLIC_API_URL"}
+            desc={`${origin}/api/${store.id}`}
+            variant={"public"}
+            className = 'mt-4'
+          />
+        </div>
       </main>
     </>
   );

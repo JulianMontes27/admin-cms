@@ -17,6 +17,11 @@ const MainNav = () => {
 
   const routes: RouteList = [
     {
+      href: `/${params.storeId}`, //the settings page is dynamic, so depends on the current store id
+      title: "Store dashboard",
+      isActive: pathname === `/${params.storeId}`,
+    },
+    {
       href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id
       title: "Settings",
       isActive: pathname === `/${params.storeId}/settings`,
@@ -26,8 +31,8 @@ const MainNav = () => {
   //fetch the stores of the currently signed-in user
 
   return (
-    <div className="flex flex-row gap-4 items-center">
-      <ul>
+    <div className="flex items-center">
+      <ul className="flex flex-row gap-5">
         {routes.map((route) => (
           <Link
             key={route.title}
