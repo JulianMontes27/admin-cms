@@ -1,12 +1,12 @@
 "use client";
 
-import StoreModal from "@/components/modals/store-modal";
-
 import { useState, useEffect } from "react";
+import StoreModal from "@/components/modals/store-modal";
 
 const ModalProvider = () => {
   //avoid hydration errors between the server and the client
   const [isMounted, setisMounted] = useState(false);
+  //once the client starts to hydrate...
   useEffect(() => {
     setisMounted(true);
   }, []);

@@ -52,7 +52,6 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
       title: "",
     },
   });
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof settingsFormSchema>) {
     // Do something with the form values.

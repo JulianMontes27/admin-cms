@@ -95,7 +95,7 @@ model Billboard{
   //relation to a store
   storeId String
   store Store @relation("StoreToBillboard", fields: [storeId], references: [id]) //its targeting the storeId of the Billboard to reference the Id prop of the Store 
-  label String
+  title String
   imgUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

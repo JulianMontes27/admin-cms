@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CMS",
-  description: "CMS",
+  description: "Content Management System for ecommerce bussiness",
 };
 //root
 export default function RootLayout({
@@ -21,9 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-          <ModalProvider />
-          {children}
-          <Toaster />
+        <ModalProvider />
+        {children}
+        <Toaster />
       </body>
     </html>
   );
