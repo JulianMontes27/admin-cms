@@ -1,5 +1,7 @@
 "use client";
 
+import axios from "axios";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,11 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Billboard } from "@prisma/client";
-import React, { useState } from "react";
+import { useState } from "react";
 import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
-import ApiAlert from "@/components/api-alert";
 import ImageUploader from "@/components/img-uploader";
+import toast from "react-hot-toast";
+
+import { useParams, useRouter } from "next/navigation";
 
 interface BillboardFormProps {
   billboard: Billboard | null;
@@ -31,6 +35,8 @@ const formSchema = z.object({
 });
 
 const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
+  const params = useParams();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   //check to see if there is data
   const formTitle = billboard ? "Edit billboard" : "Create billboard";
@@ -50,12 +56,36 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    try {
+      //if there is initial data...
+      if (billboard) {
+        await axios.patch(
+          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          values
+        );
+      } else {
+        await axios.post(`/api/${params.storeId}/billboards`, values);
+      }
+      toast.success(toastMsg);
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong.");
+    }
   }
-  async function onDelete() {}
+  async function onDelete() {
+    try {
+      await axios.delete(
+        `/api/${params.storeId}/billboards/${params.billboardId}`
+      );
+    } catch (error) {
+      toast.error(
+        "Make sure you removed all categories of your billboard first."
+      );
+    }
+  }
   return (
     <>
       <DeleteModal
