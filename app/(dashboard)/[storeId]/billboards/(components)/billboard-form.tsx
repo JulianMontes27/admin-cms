@@ -19,9 +19,10 @@ import React, { useState } from "react";
 import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
 import ApiAlert from "@/components/api-alert";
+import ImageUploader from "@/components/img-uploader";
 
 interface BillboardFormProps {
-  data: Billboard | null;
+  billboard: Billboard | null;
 }
 
 const formSchema = z.object({
@@ -29,20 +30,20 @@ const formSchema = z.object({
   imgUrl: z.string(),
 });
 
-const BillboardForm: React.FC<BillboardFormProps> = ({ data }) => {
+const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
   const [isOpen, setIsOpen] = useState(false);
   //check to see if there is data
-  const formTitle = data ? "Edit billboard" : "Create billboard";
-  const formDesc = data
+  const formTitle = billboard ? "Edit billboard" : "Create billboard";
+  const formDesc = billboard
     ? "This is the title of your billboard. Be unique!"
     : "This is the title of your billboard. Be unique!";
-  const toastMsg = data ? "Billboard updated." : "Billboard created.";
-  const formAction = data ? "Save changes" : "Create";
+  const toastMsg = billboard ? "Billboard updated." : "Billboard created.";
+  const formAction = billboard ? "Save changes" : "Create";
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: data || {
+    defaultValues: billboard || {
       title: "",
       imgUrl: "",
     },
@@ -71,7 +72,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ data }) => {
             <h1 className="text-2xl font-semibold">{formTitle}</h1>
             <p className="text-sm font-normal">{formDesc}</p>
           </div>
-          {data && (
+          {billboard && (
             <Button
               type="button"
               variant={"destructive"}
@@ -82,36 +83,24 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ data }) => {
             </Button>
           )}
         </header>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-row items-center justify-between">
-                    <FormLabel>Title</FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input placeholder={""} {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Modify the title of your store. Be unique!
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="imgUrl"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-row items-center justify-between">
-                    <FormLabel>Image URL</FormLabel>
+                    <FormLabel>Background image</FormLabel>
                   </div>
                   <FormControl>
-                    <Input placeholder={""} {...field} />
+                    <ImageUploader
+                      value={field.value ? [field.value] : []}
+                      disabled={form.formState.isSubmitting}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange("")}
+                    />
                   </FormControl>
                   <FormDescription>
                     Modify the title of your store. Be unique!
@@ -120,6 +109,26 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ data }) => {
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-row items-center justify-between">
+                      <FormLabel>Title</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input placeholder={""} {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Modify the title of your store. Be unique!
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <Button type="submit">{formAction}</Button>
           </form>
         </Form>

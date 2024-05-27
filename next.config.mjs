@@ -5,6 +5,9 @@ const nextConfig = {
       {
         hostname: "lh3.googleusercontent.com", //dont do this in production, instead, serve images from a owned file storage
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

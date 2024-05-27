@@ -7,7 +7,7 @@ const BillboardPage = async ({
 }: {
   params: { billboardId: string };
 }) => {
-  //if there is no billboard, then the create-billboard form is going to be rendered, instead, the edit form
+  //fetch billboard server-side: if there is NO billboard, then the create-billboard form is going to be rendered, instead, the edit form
   const billboard = await prisma.billboard.findUnique({
     where: {
       id: params.billboardId,
@@ -16,7 +16,7 @@ const BillboardPage = async ({
   return (
     <div className="flex flex-col">
       <div>
-        <BillboardForm data={billboard} />
+        <BillboardForm billboard={billboard} />
       </div>
     </div>
   );
