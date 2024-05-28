@@ -71,6 +71,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
       }
       toast.success(toastMsg);
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
     } catch (error) {
       toast.error("Something went wrong.");
     }

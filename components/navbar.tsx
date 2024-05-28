@@ -16,11 +16,19 @@ const Navbar = async () => {
     },
   });
   return (
-    <div className="flex flex-row justify-between border-b items-center mb-4">
-      <div className="flex flex-row">
-        <StoreCombobox items={data} />
+    <div className="flex justify-between border-b mb-4">
+      <StoreCombobox items={data} />
+
+      {/* {mobile nav} */}
+      <div className="flex sm:hidden">
+
+      </div>
+
+      {/* desktop nav */}
+      <div className="hidden sm:flex flex-row mr-4">
         <MainNav />
       </div>
+
       <UserButton user={user} />
     </div>
   );
