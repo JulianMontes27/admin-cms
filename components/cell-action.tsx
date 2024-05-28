@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
+import { Copy, Edit, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,8 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BillboardColumn } from "@/app/(dashboard)/[storeId]/billboards/(components)/columns";
+import { useParams, useRouter } from "next/navigation";
 
 const CellAction = ({ data }: { data: BillboardColumn }) => {
+  const params = useParams();
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,13 +28,21 @@ const CellAction = ({ data }: { data: BillboardColumn }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
+          className="flex gap-2"
           onClick={() => navigator.clipboard.writeText(data.id)}
         >
+          <Copy />
           Copy billboard ID
         </DropdownMenuItem>
+        <DropdownMenuItem
+          className="flex gap-3"
+          onClick={() =>
+            router.push(`/${params.storeId}/billboards/${data.id}`)
+          }
+        >
+          <Edit /> Edit
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View customer</DropdownMenuItem>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

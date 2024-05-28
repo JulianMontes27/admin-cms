@@ -1,5 +1,6 @@
 "use client";
 
+import ApiList from "@/components/api-list";
 import { BillboardColumn, columns } from "./columns";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,11 @@ const BillboardClient = ({ data }: { data: BillboardColumn[] }) => {
       <div>
         <DataTable columns={columns} data={data} filterBy={"title"} />
       </div>
+      <div>
+        <header className="text-2xl font-semibold ">API</header>
+        <p className="text-sm">Manage billboards for your store</p>
+      </div>
+      <ApiList entityName={"billboards"} entityIdName={"billboardId"} />
     </section>
   );
 };
