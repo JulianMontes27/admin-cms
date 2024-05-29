@@ -84,6 +84,7 @@ model Store{
   title String
   userId String
   billboards Billboard[] @relation("StoreToBillboard")
+  categories Category[] @relation("StoreToCategory")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -97,23 +98,22 @@ model Billboard{
   store Store @relation("StoreToBillboard", fields: [storeId], references: [id]) //its targeting the storeId of the Billboard to reference the Id prop of the Store 
   title String
   imgUrl String
+  categories Category[] @relation("BillboardToCategory")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("billboards")
 } 
-// // Optional for WebAuthn support
-// model Authenticator {
-//   credentialID         String  @unique
-//   userId               String  @db.ObjectId
-//   providerAccountId    String
-//   credentialPublicKey  String
-//   counter              Int
-//   credentialDeviceType String
-//   credentialBackedUp   Boolean
-//   transports           String?
- 
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-//   @@id([userId, credentialID])
-// }
+
+model Category {
+  id String @id @default(uuid()) @map("_id")
+  storeId String
+  store  Store @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboardId String
+  billboard Billboard @relation("BillboardToCategory", fields: [billboardId], references: [id])
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}

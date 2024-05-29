@@ -16,7 +16,7 @@ const ApiList: React.FC<ApiListProps> = ({ entityIdName, entityName }) => {
   const baseUrl = `${origin}/api/${params.storeId}`;
 
   return (
-    <>
+    <div className="mt-6">
       <ApiAlert
         title={"GET"}
         desc={`${baseUrl}/${entityName}`}
@@ -29,7 +29,25 @@ const ApiList: React.FC<ApiListProps> = ({ entityIdName, entityName }) => {
         variant={"public"}
         className={""}
       />
-    </>
+      <ApiAlert
+        title={"POST"}
+        desc={`${baseUrl}/${entityName}`}
+        variant={"admin"}
+        className={""}
+      />
+      <ApiAlert
+        title={"PATCH"}
+        desc={`${baseUrl}/${entityName}/{${entityIdName}}`}
+        variant={"admin"}
+        className={""}
+      />
+      <ApiAlert
+        title={"DELETE"}
+        desc={`${baseUrl}/${entityName}/{${entityIdName}}`}
+        variant={"admin"}
+        className={""}
+      />
+    </div>
   );
 };
 

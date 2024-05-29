@@ -29,6 +29,13 @@ const MainNav = () => {
         pathname.includes("/billboards"),
     },
     {
+      href: `/${params.storeId}/categories/`, //the settings page is dynamic, so depends on the current store id
+      title: "Categories",
+      isActive:
+        pathname === `/${params.storeId}/categories` ||
+        pathname.includes("/categories"),
+    },
+    {
       href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id
       title: "Settings",
       isActive: pathname === `/${params.storeId}/settings`,
