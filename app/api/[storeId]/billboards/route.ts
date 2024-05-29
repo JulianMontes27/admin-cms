@@ -14,7 +14,6 @@ export async function POST(
   if (!user) {
     redirect("/api/auth/signin");
   }
-  //create billboard
   const body = await req.json();
   const { title, imgUrl } = body;
 
