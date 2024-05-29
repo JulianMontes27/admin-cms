@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-///await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}, values)`;
 export async function GET(
   req: NextRequest,
   {

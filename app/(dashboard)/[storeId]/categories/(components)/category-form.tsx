@@ -33,7 +33,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface CategoryForm {
-  category: Category | null;
+  category: Category | null; //if there is no category initially
   billboards: Billboard[];
 }
 
@@ -49,9 +49,7 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
 
   //check to see if there is data
   const formTitle = category ? "Edit category" : "Create category";
-  const formDesc = category
-    ? "This is the title of your category. Be unique!"
-    : "This is the title of your category. Be unique!";
+  const formDesc = "This is the title of your category. Be unique!";
   const toastMsg = category ? "Category updated." : "Category created.";
   const formAction = category ? "Save changes" : "Create";
 
@@ -63,15 +61,26 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
       billboardId: "",
     },
   });
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const res = await axios.post(`/api/${params.storeId}/categories`, values);
-    router.refresh();
-    router.push(`/${params.storeId}/categories`);
-    toast.success(`${toastMsg}`);
+    try {
+      if (!category?.id) {
+        await axios.post(`/api/${params.storeId}/categories`, values);
+      }
+      if (category) {
+        await axios.patch(
+          `/api/${params.storeId}/categories/${category.id}`,
+          values
+        );
+      }
+      router.refresh();
+      router.push(`/${params.storeId}/categories`);
+      toast.success(`${toastMsg}`);
+    } catch (error) {
+      toast.error("Error submiting.");
+    }
   }
   async function onDelete() {
     console.log("on delete");
@@ -79,14 +88,14 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
 
   return (
     <>
-      {/* <DeleteModal
+      <DeleteModal
         title={"Are you sure?"}
         desc={"This action can't be undone."}
         onClose={() => setIsOpen(false)}
         isOpen={isOpen}
         closeModal={() => setIsOpen(!isOpen)}
         handleDelete={onDelete}
-      /> */}
+      />
       <main className="flex flex-col gap-5">
         <header className="flex flex-row  items-center justify-between">
           <div>
@@ -112,7 +121,7 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
               name="billboardId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Billboard</FormLabel>
                   <Select
                     disabled={form.formState.isSubmitting}
                     onValueChange={field.onChange}
@@ -133,7 +142,10 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
                   </Select>
                   <FormDescription>
                     You can manage your categories here {""}
-                    <Link href="/examples/forms">Categories</Link>.
+                    <Link href={`/${params.storeId}/categories`}>
+                      Categories
+                    </Link>
+                    .
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -147,7 +159,7 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-row items-center justify-between">
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Category Title</FormLabel>
                     </div>
                     <FormControl>
                       <Input placeholder={""} {...field} />
