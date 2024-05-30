@@ -45,7 +45,15 @@ const MainNav = () => {
       href: `/${params.storeId}/colors/`, //the settings page is dynamic, so depends on the current store id
       title: "Colors",
       isActive:
-        pathname === `/${params.storeId}/colors` || pathname.includes("/colors"),
+        pathname === `/${params.storeId}/colors` ||
+        pathname.includes("/colors"),
+    },
+    {
+      href: `/${params.storeId}/products`, //the settings page is dynamic, so depends on the current store id
+      title: "Products",
+      isActive:
+        pathname === `/${params.storeId}/products` ||
+        pathname.includes("/products"),
     },
     {
       href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id

@@ -155,7 +155,7 @@ model Product{
   categoryId String
   category Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name String
-  price String
+  price Int //store prices in cents
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
   sizeId String
@@ -167,7 +167,7 @@ model Product{
   updatedAt DateTime @updatedAt
   @@map("products")
 }
-
+//individual image
 model Image {
   id String @id @default(uuid()) @map("_id")
   productId String
