@@ -18,7 +18,7 @@ const MainNav = () => {
   const routes: RouteList = [
     {
       href: `/${params.storeId}`, //the settings page is dynamic, so depends on the current store id
-      title: "Store dashboard",
+      title: "Overview",
       isActive: pathname === `/${params.storeId}`,
     },
     {
@@ -34,6 +34,18 @@ const MainNav = () => {
       isActive:
         pathname === `/${params.storeId}/categories` ||
         pathname.includes("/categories"),
+    },
+    {
+      href: `/${params.storeId}/sizes/`, //the settings page is dynamic, so depends on the current store id
+      title: "Sizes",
+      isActive:
+        pathname === `/${params.storeId}/sizes` || pathname.includes("/sizes"),
+    },
+    {
+      href: `/${params.storeId}/colors/`, //the settings page is dynamic, so depends on the current store id
+      title: "Colors",
+      isActive:
+        pathname === `/${params.storeId}/colors` || pathname.includes("/colors"),
     },
     {
       href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id

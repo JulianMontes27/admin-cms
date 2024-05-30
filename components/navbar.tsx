@@ -25,7 +25,7 @@ const Navbar = async () => {
       </div>
 
       {/* desktop nav */}
-      <div className="hidden sm:flex flex-row mr-4">
+      <div className="hidden md:flex flex-row mr-4">
         <MainNav />
       </div>
 

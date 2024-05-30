@@ -83,7 +83,17 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
     }
   }
   async function onDelete() {
-    console.log("on delete");
+    try {
+      await axios.delete(
+        `/api/${params.storeId}/categories/${params.categoryId}`
+      );
+      router.push(`/${params.storeId}/categories`);
+      router.refresh();
+
+      toast.success("Category deleted succesfully.");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
