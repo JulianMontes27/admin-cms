@@ -5,6 +5,7 @@ import axios from "axios";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,8 +17,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+
 import { useState } from "react";
+
+import { Product, Image, Category, Size, Color } from "@prisma/client";
 import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
 import ImageUploader from "@/components/img-uploader";
@@ -31,22 +34,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface ProductFormProps {
-  product:
-    | (Product & {
-        images: Image[];
-      })
-    | null;
-  sizes: Size[];
+  initialData: (Product & { images: Image[] }) | null;
   categories: Category[];
+  sizes: Size[];
   colors: Color[];
 }
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(2).max(50),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
@@ -56,10 +54,10 @@ const formSchema = z.object({
   isArchived: z.boolean().default(false).optional(),
 });
 
-const BillboardForm: React.FC<ProductFormProps> = ({
-  product,
-  sizes,
+const ProductForm: React.FC<ProductFormProps> = ({
+  initialData,
   categories,
+  sizes,
   colors,
 }) => {
   const params = useParams();
@@ -67,17 +65,17 @@ const BillboardForm: React.FC<ProductFormProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   //check to see if there is data
-  const formTitle = product ? "Edit product" : "Create product";
-  const formDesc = product
+  const formTitle = initialData ? "Edit product" : "Create product";
+  const formDesc = initialData
     ? "This is the title of your product. Be unique!"
     : "This is the title of your product. Be unique!";
-  const toastMsg = product ? "Product updated." : "Product created.";
-  const formAction = product ? "Save changes" : "Create";
+  const toastMsg = initialData ? "Product updated." : "Product created.";
+  const formAction = initialData ? "Save changes" : "Create";
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: product || {
+    defaultValues: initialData || {
       name: "",
       images: [],
       price: 0,
@@ -91,11 +89,13 @@ const BillboardForm: React.FC<ProductFormProps> = ({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
     try {
       //if there is initial data...
-      if (product) {
+      if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/billboards/${params.productId}`,
+          `/api/${params.storeId}/products/${params.productId}`,
           values
         );
       } else {
@@ -110,12 +110,10 @@ const BillboardForm: React.FC<ProductFormProps> = ({
   }
   async function onDelete() {
     try {
-      await axios.delete(
-        `/api/${params.storeId}/billboards/${params.productId}`
-      );
+      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
       router.push(`/${params.storeId}/products`);
       router.refresh();
-      toast.success("Billboard deleted succesfully.");
+      toast.success("Product deleted succesfully.");
     } catch (error) {
       toast.error("Something went wrong.");
     }
@@ -136,7 +134,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
             <h1 className="text-2xl font-semibold">{formTitle}</h1>
             <p className="text-sm font-normal">{formDesc}</p>
           </div>
-          {product && (
+          {initialData && (
             <Button
               type="button"
               variant={"destructive"}
@@ -147,6 +145,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
             </Button>
           )}
         </header>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -154,7 +153,9 @@ const BillboardForm: React.FC<ProductFormProps> = ({
               name="images"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Images</FormLabel>
+                  <div className="flex flex-row items-center justify-between">
+                    <FormLabel>Images</FormLabel>
+                  </div>
                   <FormControl>
                     <ImageUploader
                       value={field.value.map((image) => image.url)}
@@ -164,9 +165,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                       }
                       onRemove={(url) =>
                         field.onChange([
-                          ...field.value.filter(
-                            (current) => current.url !== url
-                          ),
+                          ...field.value.filter((curr) => curr.url !== url),
                         ])
                       }
                     />
@@ -178,7 +177,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-10">
+            <div className="grid grid-cols-3 gap-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -186,11 +185,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input
-                        disabled={form.formState.isSubmitting}
-                        placeholder="Product name"
-                        {...field}
-                      />
+                      <Input placeholder={""} {...field} />
                     </FormControl>
                     <FormDescription>
                       Modify the title of your store. Be unique!
@@ -206,12 +201,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        disabled={form.formState.isSubmitting}
-                        placeholder="19.99"
-                        {...field}
-                      />
+                      <Input placeholder={"9.99"} type="number" {...field} />
                     </FormControl>
                     <FormDescription>
                       Modify the price of your product. Be unique!
@@ -246,10 +236,6 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                     </Select>
                     <FormDescription>
                       You can manage your categories here {""}
-                      <Link href={`/${params.storeId}/categories`}>
-                        Categories
-                      </Link>
-                      .
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -257,7 +243,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
               />
               <FormField
                 control={form.control}
-                name="categoryId"
+                name="sizeId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Size</FormLabel>
@@ -268,7 +254,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder="Select a size" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -280,8 +266,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      You can manage your sizes here {""}
-                      <Link href={`/${params.storeId}/sizes`}>Categories</Link>.
+                      You can manage your categories here {""}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -289,10 +274,10 @@ const BillboardForm: React.FC<ProductFormProps> = ({
               />
               <FormField
                 control={form.control}
-                name="categoryId"
+                name="colorId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Colors</FormLabel>
+                    <FormLabel>Color</FormLabel>
                     <Select
                       disabled={form.formState.isSubmitting}
                       onValueChange={field.onChange}
@@ -312,9 +297,7 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      You can manage your color here {""}
-                      <Link href={`/${params.storeId}/colors`}>Categories</Link>
-                      .
+                      You can manage your categories here {""}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -324,23 +307,19 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                 control={form.control}
                 name="isFeatured"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start space-x-3 space-y-0 rounded-md border p-4 shadow gap-4 ">
-                    <div className="flex gap-3">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Select to be featured.</FormLabel>
-                      </div>
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Featured?</FormLabel>
+                      <FormDescription>
+                        Select to feature your product on the home page.
+                      </FormDescription>
                     </div>
-                    <FormDescription>
-                      You can manage your color here {""}
-                      <Link href={`/${params.storeId}/colors`}>Categories</Link>
-                      .
-                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -348,27 +327,24 @@ const BillboardForm: React.FC<ProductFormProps> = ({
                 control={form.control}
                 name="isArchived"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start space-x-3 space-y-0 rounded-md border p-4 shadow gap-4">
-                    <div className="flex gap-3">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Select to be archived.</FormLabel>
-                      </div>
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Archive?</FormLabel>
+                      <FormDescription>
+                        Select to archive your product (not visible on the
+                        webpage).
+                      </FormDescription>
                     </div>
-
-                    <FormDescription>
-                      This product will not be displayed in the store.
-                    </FormDescription>
                   </FormItem>
                 )}
               />
             </div>
-
             <Button type="submit">{formAction}</Button>
           </form>
         </Form>
@@ -377,4 +353,4 @@ const BillboardForm: React.FC<ProductFormProps> = ({
   );
 };
 
-export default BillboardForm;
+export default ProductForm;

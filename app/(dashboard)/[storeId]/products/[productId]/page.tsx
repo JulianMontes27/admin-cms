@@ -6,8 +6,8 @@ const ProductPage = async ({
 }: {
   params: { productId: string; storeId: string };
 }) => {
-  //fetch product server-side: if there is NO billboard, then the create-product form is going to be rendered, instead, the edit form
-  const product = await prisma.product.findUnique({
+  //fetch billboard server-side: if there is NO billboard, then the create-billboard form is going to be rendered, instead, the edit form
+  const initialData = await prisma.product.findUnique({
     where: {
       id: params.productId,
     },
@@ -34,7 +34,7 @@ const ProductPage = async ({
     <div className="flex flex-col">
       <div>
         <ProductForm
-          product={product}
+          initialData={initialData}
           categories={categories}
           sizes={sizes}
           colors={colors}

@@ -1,24 +1,22 @@
 import prisma from "@/lib/prisma";
 import type { ProductColumn } from "./(components)/columns";
-import ProductClient from "./(components)/billboard-client";
-import { formatPrice } from "@/lib/utils";
 import { format } from "date-fns";
+import { formatPrice } from "@/lib/utils";
+import ProductClient from "./(components)/product-client";
 
 const ProductsPage = async ({
   params,
 }: {
   params: {
     storeId: string;
-    productId: string;
   };
 }) => {
-  //fetch the store's billboards
+  //fetch the store's products
   const products = await prisma.product.findMany({
     where: {
-      storeId: params.productId,
+      storeId: params.storeId,
     },
     include: {
-      //to access these individual models and display them in the data-table
       category: true,
       size: true,
       color: true,
@@ -27,13 +25,13 @@ const ProductsPage = async ({
       createdAt: "desc",
     },
   });
-  //send formatted products to the client
+  //send formatted product to the client
   const formattedProducts: ProductColumn[] = products.map((item) => ({
     id: item.id,
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    price: formatPrice(item.price),
+    price: item.price,
     category: item.category.title,
     size: item.size.name,
     color: item.color.value,

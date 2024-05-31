@@ -6,15 +6,8 @@ import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { Category, Color, Size } from "@prisma/client";
 
-interface ProductClientProps {
-  data: ProductColumn[];
-}
-
-const ProductClient: React.FC<ProductClientProps> = ({
-  data,
-}) => {
+const ProductClient = ({ data }: { data: ProductColumn[] }) => {
   const params = useParams();
   const router = useRouter();
   return (

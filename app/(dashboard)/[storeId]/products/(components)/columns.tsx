@@ -1,12 +1,12 @@
 "use client";
 
+import CellAction from "@/components/cell-action";
 import { ColumnDef } from "@tanstack/react-table";
-import CellAction from "./cell-action";
 
 export type ProductColumn = {
   id: string;
   name: string;
-  price: string;
+  price: number;
   size: string;
   category: string;
   color: string;
@@ -47,10 +47,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
     accessorKey: "color",
     header: "Color",
     cell: ({ row }) => (
-      <div className="flex items-center gap-x-3">
+      <div>
         {row.original.color}
         <div
-          className="h-6 w-6 rounded-full border"
+          className="h-5 w-6 rounded-full border "
           style={{ backgroundColor: row.original.color }}
         />
       </div>
@@ -59,9 +59,5 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "createdAt",
     header: "Date",
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

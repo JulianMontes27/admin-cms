@@ -165,6 +165,8 @@ model Product{
   images Image[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  
   @@map("products")
 }
 //individual image
