@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { MobileNav } from "./mobile-nav";
 
 interface Route {
   href: string;
@@ -56,6 +57,13 @@ const MainNav = () => {
         pathname.includes("/products"),
     },
     {
+      href: `/${params.storeId}/orders`, //the settings page is dynamic, so depends on the current store id
+      title: "Orders",
+      isActive:
+        pathname === `/${params.storeId}/orders` ||
+        pathname.includes("/orders"),
+    },
+    {
       href: `/${params.storeId}/settings/`, //the settings page is dynamic, so depends on the current store id
       title: "Settings",
       isActive: pathname === `/${params.storeId}/settings`,
@@ -65,8 +73,9 @@ const MainNav = () => {
   //fetch the stores of the currently signed-in user
 
   return (
-    <div className="flex items-center">
-      <ul className="flex flex-row gap-5">
+    <div className="max-w-xl ">
+      {/* {mobile nav} */}
+      <ul className="xl:flex h-full items-center md:gap-6 hidden ">
         {routes.map((route) => (
           <Link
             key={route.title}
@@ -77,6 +86,9 @@ const MainNav = () => {
           </Link>
         ))}
       </ul>
+      <div className="xl:hidden ">
+        <MobileNav routes={routes} />
+      </div>
     </div>
   );
 };

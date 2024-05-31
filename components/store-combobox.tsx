@@ -65,14 +65,14 @@ export function StoreCombobox({ items = [] }: StoreComboboxProps) {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className="w-[200px] justify-between border-none flex "
+          className="max-w-[200px] justify-between border-none flex "
         >
           <StoreIcon size={20} />
           {currentActiveStore && <p>{currentActiveStore.label}</p>}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="max-w-[230px] p-0 border">
         <Command>
           <CommandList>
             <CommandInput placeholder="Search a store..." />

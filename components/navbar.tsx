@@ -19,15 +19,7 @@ const Navbar = async () => {
     <div className="flex justify-between border-b mb-4">
       <StoreCombobox items={data} />
 
-      {/* {mobile nav} */}
-      <div className="flex sm:hidden">
-
-      </div>
-
-      {/* desktop nav */}
-      <div className="hidden md:flex flex-row mr-4">
-        <MainNav />
-      </div>
+      <MainNav />
 
       <UserButton user={user} />
     </div>
