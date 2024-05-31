@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 
 interface MobileNavProps {
@@ -21,23 +22,27 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ routes }) => {
-  const router = useRouter();
   const params = useParams();
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Manage store</NavigationMenuTrigger>
-          <NavigationMenuContent className="flex flex-col gap-4 w-[300px]">
-            {routes.map((route) => (
-              <NavigationMenuLink
-                key={route.title}
-                className="cursor-pointer"
-                href={route.href}
-              >
-                {route.title}
-              </NavigationMenuLink>
-            ))}
+          <NavigationMenuContent>
+            <ul className="grid grid-cols-2 gap-4 w-[250px]">
+              {routes.map((route) => (
+                <NavigationMenuLink
+                  key={route.title}
+                  className={cn(
+                    "cursor-pointer",
+                    route.isActive && "font-bold"
+                  )}
+                  href={route.href}
+                >
+                  {route.title}
+                </NavigationMenuLink>
+              ))}
+            </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
