@@ -12,9 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useParams, useRouter } from "next/navigation";
-import { CategoryColumn } from "./columns";
 
-const CellAction = ({ cate }: { cate: CategoryColumn }) => {
+import { ProductColumn } from "./columns";
+
+const CellAction = ({ product }: { product: ProductColumn }) => {
   const params = useParams();
   const router = useRouter();
   return (
@@ -29,16 +30,18 @@ const CellAction = ({ cate }: { cate: CategoryColumn }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           className="flex gap-2"
-          onClick={() => navigator.clipboard.writeText(cate.id)}
+          onClick={() => navigator.clipboard.writeText(product.id)}
         >
           <Copy />
-          Copy category ID
+          Copy product ID
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex gap-3"
-          onClick={() => router.push(`/${params.storeId}/categories/${cate.id}`)}
+          onClick={() =>
+            router.push(`/${params.storeId}/products/${product.id}`)
+          }
         >
-          <Edit /> Edit category
+          <Edit /> Edit product
         </DropdownMenuItem>
         <DropdownMenuSeparator />
       </DropdownMenuContent>

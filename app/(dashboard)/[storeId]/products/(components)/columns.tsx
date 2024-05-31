@@ -1,7 +1,8 @@
 "use client";
 
-import CellAction from "@/components/cell-action";
 import { ColumnDef } from "@tanstack/react-table";
+
+import CellAction from "./cell-action";
 
 export type ProductColumn = {
   id: string;
@@ -60,4 +61,6 @@ export const columns: ColumnDef<ProductColumn>[] = [
     accessorKey: "createdAt",
     header: "Date",
   },
+  //row actions
+  { id: "actions", cell: ({ row }) => <CellAction product={row.original} /> },
 ];
