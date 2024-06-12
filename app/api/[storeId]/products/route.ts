@@ -13,11 +13,6 @@ export async function GET(
     };
   }
 ) {
-  const session = await auth();
-  const user = session?.user;
-  if (!user) {
-    redirect("/api/auth/signin");
-  }
   try {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get("categoryId") || undefined;

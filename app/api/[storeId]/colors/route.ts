@@ -47,12 +47,12 @@ export async function GET(
     };
   }
 ) {
-  //check for auth
-  const session = await auth();
-  const user = session?.user;
-  if (!user) {
-    redirect("/api/auth/signin");
-  }
+  // //check for auth
+  // const session = await auth();
+  // const user = session?.user;
+  // if (!user) {
+  //   redirect("/api/auth/signin");
+  // }
   try {
     const data = await prisma.color.findMany({
       where: {

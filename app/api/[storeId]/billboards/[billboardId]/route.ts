@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-///await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}, values)`;
 export async function GET(
   req: NextRequest,
   {
@@ -15,18 +14,20 @@ export async function GET(
   }
 ) {
   //check for auth
-  const session = await auth();
-  const user = session?.user;
-  if (!user) {
-    redirect("/api/auth/signin");
-  }
   try {
     const res = await prisma.billboard.findUnique({
       where: {
         id: params.billboardId,
       },
     });
-    return NextResponse.json(res);
+    if (res) {
+      const response = {
+        id: res.id,
+        name: res.title,
+        imgUrl: res.imgUrl,
+      };
+      return NextResponse.json(response);
+    }
   } catch (error) {
     return new NextResponse("[GET]: Internal error", { status: 500 });
   }

@@ -13,16 +13,19 @@ export async function GET(
     };
   }
 ) {
-  //check for auth
-  const session = await auth();
-  const user = session?.user;
-  if (!user) {
-    redirect("/api/auth/signin");
-  }
+  // //check for auth
+  // const session = await auth();
+  // const user = session?.user;
+  // if (!user) {
+  //   redirect("/api/auth/signin");
+  // }
   try {
-    const res = await prisma.billboard.findUnique({
+    const res = await prisma.category.findUnique({
       where: {
         id: params.categoryId,
+      },
+      include: {
+        billboard: true,
       },
     });
     return NextResponse.json(res);
