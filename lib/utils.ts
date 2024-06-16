@@ -6,10 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number) {
-  const priceInDollars = price / 100;
-  const formatter = new Intl.NumberFormat("en-US", {
+  const formatter = new Intl.NumberFormat("es-CO", {
     style: "currency",
-    currency: "USD",
+    currency: "COP",
   });
-  return formatter.format(priceInDollars);
+  return formatter.format(price);
 }

@@ -57,6 +57,13 @@ const MainNav = () => {
         pathname.includes("/products"),
     },
     {
+      href: `/${params.storeId}/collages`, //the settings page is dynamic, so depends on the current store id
+      title: "Collages",
+      isActive:
+        pathname === `/${params.storeId}/collages` ||
+        pathname.includes("/collages"),
+    },
+    {
       href: `/${params.storeId}/orders`, //the settings page is dynamic, so depends on the current store id
       title: "Orders",
       isActive:
@@ -86,7 +93,7 @@ const MainNav = () => {
           </Link>
         ))}
       </ul>
-      <div className="xl:hidden ">
+      <div className="xl:hidden h-full w-full  ">
         <MobileNav routes={routes} />
       </div>
     </div>

@@ -18,9 +18,7 @@ const Navbar = async () => {
   return (
     <div className="flex justify-between border-b mb-4">
       <StoreCombobox items={data} />
-
       <MainNav />
-
       <UserButton user={user} />
     </div>
   );

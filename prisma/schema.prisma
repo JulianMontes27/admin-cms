@@ -89,6 +89,7 @@ model Store{
   colors Color[] @relation("StoreToColor")
   products Product[] @relation("StoreToProduct")
   orders Order[] @relation("StoreToOrder")
+  collages Collage[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -156,7 +157,7 @@ model Product{
   categoryId String
   category Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name String
-  price Int //store prices in cents
+  price Int //store prices in COP
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
   sizeId String
@@ -177,6 +178,8 @@ model Image {
   productId String
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url String
+  collageId String
+  collage Collage @relation(fields: [collageId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -206,4 +209,19 @@ model OrderItem{
   product Product @relation(fields: [productId], references: [id])
 
   @@map("order_items")
+}
+
+model Collage{
+  id String @id @default(uuid()) @map("_id")
+  name String
+  desc String
+  images Image[] //one to many with Image
+  storeId String
+  store Store @relation(fields: [storeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  @@map("collages")
+
 }
