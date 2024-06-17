@@ -1,35 +1,37 @@
 "use client";
 
-import Image from "next/image";
-import { CldUploadWidget } from "next-cloudinary";
-import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { ImagePlus, Trash } from "lucide-react";
+import { ImagePlusIcon, Trash } from "lucide-react";
 
-interface ImgUploaderProps {
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+
+import { Button } from "./ui/button";
+
+import { CldUploadWidget } from "next-cloudinary";
+
+interface ImageUploaderProps {
   disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
 }
 
-const ImgUploader: React.FC<ImgUploaderProps> = ({
-  disabled,
+export const ImageUploader: React.FC<ImageUploaderProps> = ({
   onChange,
   onRemove,
   value,
+  disabled,
 }) => {
-  //hydration check
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setisMounted] = useState(false);
   useEffect(() => {
-    setIsMounted(true);
+    setisMounted(true);
   }, []);
-  const onUpload = (result: any) => {
+
+  const onUploadSuccess = (result: any) => {
     onChange(result.info.secure_url);
   };
-  if (!isMounted) {
-    return null;
-  }
+
+  if (!isMounted) return null;
 
   return (
     <div>
@@ -37,7 +39,7 @@ const ImgUploader: React.FC<ImgUploaderProps> = ({
         {value.map((url) => (
           <div
             key={url}
-            className="relative w-[200px] h-[200px] rouded-md overflow-hidden"
+            className="relative w-[200px] h-[200px] rounded-md overflow-hidden"
           >
             <div className="z-10 absolute top-2 right-2">
               <Button
@@ -49,24 +51,26 @@ const ImgUploader: React.FC<ImgUploaderProps> = ({
                 <Trash className="h-4 w-4" />
               </Button>
             </div>
-            <Image src={url} alt={"image"} className="object-cover" fill />
+            <Image
+              src={url}
+              alt={"Image"}
+              fill
+              sizes={"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
+              className="object-cover"
+            />
           </div>
         ))}
       </div>
-      <CldUploadWidget onSuccess={onUpload} uploadPreset="aa1ks7hv">
+      <CldUploadWidget uploadPreset={"sb9b8kpl"} onUpload={onUploadSuccess}>
         {({ open }) => {
-          const onClick = () => {
-            open();
-          };
           return (
             <Button
-              disabled={disabled}
               type="button"
               variant={"secondary"}
-              onClick={onClick}
+              disabled={disabled}
+              onClick={() => open()}
             >
-              <ImagePlus className="h-4 w-4 mr-2" />
-              Upload an image
+              <ImagePlusIcon className="mr-2 h-4 2-4" />
             </Button>
           );
         }}
@@ -74,5 +78,3 @@ const ImgUploader: React.FC<ImgUploaderProps> = ({
     </div>
   );
 };
-
-export default ImgUploader;

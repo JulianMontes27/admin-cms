@@ -162,7 +162,7 @@ const BillboardForm: React.FC<CategoryForm> = ({ category, billboards }) => {
               )}
             />
 
-            <div className="">
+            <div>
               <FormField
                 control={form.control}
                 name="title"

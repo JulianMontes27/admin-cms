@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+
 import axios from "axios";
 
 import { z } from "zod";
@@ -15,15 +18,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Billboard } from "@prisma/client";
-import { useState } from "react";
-import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
-import ImageUploader from "@/components/img-uploader";
-import toast from "react-hot-toast";
+import { Input } from "@/components/ui/input";
 
-import { useParams, useRouter } from "next/navigation";
+import { Billboard } from "@prisma/client";
+
+import DeleteModal from "@/components/modals/delete-modal";
+import { ImageUploader } from "@/components/img-uploader";
+
+import toast from "react-hot-toast";
 
 interface BillboardFormProps {
   billboard: Billboard | null;
@@ -38,6 +41,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
   const params = useParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
   //check to see if there is data
   const formTitle = billboard ? "Edit billboard" : "Create billboard";
   const formDesc = billboard
@@ -54,11 +58,8 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
       imgUrl: "",
     },
   });
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
       //if there is initial data...
       if (billboard) {
@@ -71,7 +72,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ billboard }) => {
       }
       router.push(`/${params.storeId}/billboards`);
       router.refresh();
-      toast.success("Submitted succesfully.");
+      toast.success(toastMsg);
     } catch (error) {
       toast.error("Something went wrong.");
     }

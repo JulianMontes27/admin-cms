@@ -2,10 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import CellAction from "./cell-action";
+import { CollageImage } from "@prisma/client";
 
 export type CollageColumn = {
   id: string;
   name: string;
+  collageImages: CollageImage[];
   createdAt: string;
 };
 

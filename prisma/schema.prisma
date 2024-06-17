@@ -178,8 +178,6 @@ model Image {
   productId String
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url String
-  collageId String
-  collage Collage @relation(fields: [collageId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -215,13 +213,22 @@ model Collage{
   id String @id @default(uuid()) @map("_id")
   name String
   desc String
-  images Image[] //one to many with Image
+  collageImages CollageImage[] //one-to-many 
   storeId String
   store Store @relation(fields: [storeId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
   @@map("collages")
+}
 
+model CollageImage{
+  id String @id @default(uuid()) @map("_id")
+  collageId String
+  collage Collage @relation(fields: [collageId], references: [id], onDelete: Cascade)
+  url String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("collage_images")
 }

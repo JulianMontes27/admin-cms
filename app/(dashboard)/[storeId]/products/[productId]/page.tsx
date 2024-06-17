@@ -6,7 +6,6 @@ const ProductPage = async ({
 }: {
   params: { productId: string; storeId: string };
 }) => {
-  //fetch billboard server-side: if there is NO billboard, then the create-billboard form is going to be rendered, instead, the edit form
   const initialData = await prisma.product.findUnique({
     where: {
       id: params.productId,

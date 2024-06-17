@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { Collage } from "@prisma/client";
 import { format } from "date-fns";
 
 import { CollageColumn } from "./(components)/columns";
@@ -17,6 +16,9 @@ const CollagesPage = async ({
     where: {
       storeId: params.storeId,
     },
+    include: {
+      collageImages: true,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -25,6 +27,7 @@ const CollagesPage = async ({
   const formattedCollages: CollageColumn[] = collages.map((item) => ({
     id: item.id,
     name: item.name,
+    collageImages: item.collageImages,
     createdAt: format(item.createdAt, "MMM do,yyyy"),
   }));
   return (

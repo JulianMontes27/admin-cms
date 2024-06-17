@@ -24,21 +24,22 @@ import DeleteModal from "@/components/modals/delete-modal";
 import toast from "react-hot-toast";
 
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 
-import { Collage } from "@prisma/client";
+import { Collage, CollageImage } from "@prisma/client";
 
-interface CollageForm {
-  collage: Collage | null;
-}
+import { ImageUploader } from "@/components/img-uploader";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  desc: z.string().min(1).optional(),
-  images: z.object({ url: z.string() }).array(),
+  desc: z.string().min(1),
+  collageImages: z.object({ url: z.string() }).array(),
 });
 
-const CollageForm: React.FC<CollageForm> = ({ collage }) => {
+interface CollageFormProps {
+  collage: (Collage & { collageImages: CollageImage[] }) | null;
+}
+
+const CollageForm: React.FC<CollageFormProps> = ({ collage }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -56,28 +57,30 @@ const CollageForm: React.FC<CollageForm> = ({ collage }) => {
     defaultValues: collage || {
       name: "",
       desc: "",
-      images: [],
+      collageImages: [],
     },
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      if (!collage?.id) {
-        await axios.post(`/api/${params.storeId}/collages`, values);
-      }
-      if (collage) {
-        await axios.patch(
-          `/api/${params.storeId}/collages/${collage.id}`,
-          values
-        );
-      }
-      router.refresh();
-      router.push(`/${params.storeId}/collages`);
-      toast.success(`${toastMsg}`);
-    } catch (error) {
-      toast.error("Error submiting.");
-    }
+    // try {
+    //   if (!collage?.id) {
+    //     await axios.post(`/api/${params.storeId}/collages`, values);
+    //   }
+    //   if (collage) {
+    //     await axios.patch(
+    //       `/api/${params.storeId}/collages/${collage.id}`,
+    //       values
+    //     );
+    //   }
+    //   router.refresh();
+    //   router.push(`/${params.storeId}/collages`);
+    //   toast.success(toastMsg);
+    // } catch (error) {
+    //   toast.error("Error submiting.");
+    // }
+    console.log(values);
   }
+
   async function onDelete() {
     try {
       await axios.delete(`/api/${params.storeId}/collages/${params.collageId}`);
@@ -119,36 +122,64 @@ const CollageForm: React.FC<CollageForm> = ({ collage }) => {
         </header>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
             <FormField
               control={form.control}
-              name="name"
+              name="collageImages"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <div className="flex flex-row items-center justify-between">
+                    <FormLabel>Images</FormLabel>
+                  </div>
+                  <FormControl>
+                    <ImageUploader
+                      value={field.value.map(
+                        (collageImage) => collageImage.url
+                      )}
+                      disabled={form.formState.isSubmitting}
+                      onChange={(url: string) =>
+                        field.onChange([...field.value, { url }])
+                      }
+                      onRemove={(url: string) =>
+                        field.onChange([
+                          ...field.value.filter((curr) => curr.url !== url),
+                        ])
+                      }
+                    />
+                  </FormControl>
                   <FormDescription>
-                    You can manage your collages here {""}
-                    <Link href={`/${params.storeId}/collages`}>Collages</Link>.
+                    The images that form your Collage.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <div>
+            <div className="grid grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder={""} {...field} />
+                    </FormControl>
+                    <FormDescription>The name of your Collage.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="desc"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-row items-center justify-between">
-                      <FormLabel>Collage description</FormLabel>
-                    </div>
+                  <FormItem className="col-span-3">
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder={""} {...field} />
+                      <Input placeholder={field.value} type="text" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Modify the description of your collage.
+                      The description of your Collage.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

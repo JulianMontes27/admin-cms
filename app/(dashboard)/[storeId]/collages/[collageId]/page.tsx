@@ -11,6 +11,9 @@ const CollagesPage = async ({
     where: {
       id: params.collageId,
     },
+    include: {
+      collageImages: true,
+    },
   });
 
   return (

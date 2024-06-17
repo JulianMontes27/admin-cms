@@ -14,6 +14,8 @@ import { MoveDown } from "lucide-react";
 
 import { Separator } from "./ui/separator";
 
+import { cn } from "@/lib/utils";
+
 interface MobileNavProps {
   routes: {
     href: string;
@@ -23,11 +25,6 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ routes }) => {
-  // const [isMounted, setisMounted] = useState(false);
-  // useEffect(() => {
-  //   setisMounted(true);
-  // }, []);
-  // if (!isMounted) return null;
   const router = useRouter();
   return (
     <DropdownMenu>
@@ -38,16 +35,15 @@ export const MobileNav: React.FC<MobileNavProps> = ({ routes }) => {
       <DropdownMenuContent className="w-80">
         <DropdownMenuGroup>
           {routes.map((route) => (
-            <>
+            <div key={route.href}>
               <DropdownMenuItem
-                key={route.href}
                 onClick={() => router.push(route.href)}
-                className="cursor-pointer"
+                className={cn("cursor-pointer", route.isActive && "font-bold")}
               >
                 {route.title}
               </DropdownMenuItem>
               <Separator />
-            </>
+            </div>
           ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>

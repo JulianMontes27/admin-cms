@@ -23,7 +23,7 @@ import { useState } from "react";
 import { Product, Image, Category, Size, Color } from "@prisma/client";
 import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
-import ImageUploader from "@/components/img-uploader";
+import { ImageUploader } from "@/components/img-uploader";
 import toast from "react-hot-toast";
 
 import { useParams, useRouter } from "next/navigation";
@@ -62,6 +62,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
 
   //check to see if there is data
@@ -86,11 +87,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
       isArchived: false,
     },
   });
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
       //if there is initial data...
       if (initialData) {
@@ -160,10 +158,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     <ImageUploader
                       value={field.value.map((image) => image.url)}
                       disabled={form.formState.isSubmitting}
-                      onChange={(url) =>
+                      onChange={(url: string) =>
                         field.onChange([...field.value, { url }])
                       }
-                      onRemove={(url) =>
+                      onRemove={(url: string) =>
                         field.onChange([
                           ...field.value.filter((curr) => curr.url !== url),
                         ])
