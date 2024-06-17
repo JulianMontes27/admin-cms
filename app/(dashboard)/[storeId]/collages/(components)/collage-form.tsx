@@ -62,23 +62,22 @@ const CollageForm: React.FC<CollageFormProps> = ({ collage }) => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // try {
-    //   if (!collage?.id) {
-    //     await axios.post(`/api/${params.storeId}/collages`, values);
-    //   }
-    //   if (collage) {
-    //     await axios.patch(
-    //       `/api/${params.storeId}/collages/${collage.id}`,
-    //       values
-    //     );
-    //   }
-    //   router.refresh();
-    //   router.push(`/${params.storeId}/collages`);
-    //   toast.success(toastMsg);
-    // } catch (error) {
-    //   toast.error("Error submiting.");
-    // }
-    console.log(values);
+    try {
+      if (!collage?.id) {
+        await axios.post(`/api/${params.storeId}/collages`, values);
+      }
+      if (collage) {
+        await axios.patch(
+          `/api/${params.storeId}/collages/${collage.id}`,
+          values
+        );
+      }
+      router.refresh();
+      router.push(`/${params.storeId}/collages`);
+      toast.success(toastMsg);
+    } catch (error) {
+      toast.error("Error submiting.");
+    }
   }
 
   async function onDelete() {

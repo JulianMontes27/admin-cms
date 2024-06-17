@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { Collage, CollageImage } from "@prisma/client";
+import { CollageImage } from "@prisma/client";
 
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
