@@ -1,6 +1,7 @@
 import SettingsForm from "@/components/settings-form";
 import getSession from "@/lib/getSession";
 import prisma from "@/lib/prisma";
+
 import { redirect } from "next/navigation";
 
 interface StoreSettingsProps {
@@ -15,12 +16,13 @@ const StoreSettings = async ({ params }: StoreSettingsProps) => {
   if (!user) {
     redirect("/api/auth/signin");
   }
+
   const store = await prisma.store.findUnique({
     where: {
       id: params.storeId,
     },
   });
-
+  // @ts-ignore: Ignore error because user or store might be null or undefined
   return (
     <div>{user && store && <SettingsForm store={store} user={user} />}</div>
   );

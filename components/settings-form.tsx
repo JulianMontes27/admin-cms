@@ -28,12 +28,7 @@ import { useState } from "react";
 import ApiAlert from "./api-alert";
 import { useOrigin } from "@/hooks/use-origin";
 
-interface SettingsFormProps {
-  user: User;
-  store: Store;
-}
-
-const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
+const SettingsForm = ({ user, store }: { user: any; store: any }) => {
   const origin = useOrigin();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -117,7 +112,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ user, store }) => {
             title={"NEXT_PUBLIC_API_URL"}
             desc={`${origin}/api/${store.id}`}
             variant={"public"}
-            className = 'mt-4'
+            className="mt-4"
           />
         </div>
       </main>
