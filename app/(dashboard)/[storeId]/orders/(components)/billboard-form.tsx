@@ -20,7 +20,7 @@ import { Billboard } from "@prisma/client";
 import { useState } from "react";
 import DeleteModal from "@/components/modals/delete-modal";
 import { Trash } from "lucide-react";
-import ImageUploader from "@/components/img-uploader";
+import {ImageUploader} from "@/components/img-uploader";
 import toast from "react-hot-toast";
 
 import { useParams, useRouter } from "next/navigation";
