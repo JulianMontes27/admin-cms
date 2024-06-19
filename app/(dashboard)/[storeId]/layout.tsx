@@ -33,7 +33,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   return (
     <main className="container">
       <Navbar />
-      <div className="mt-6">{children}</div>
+      <div className="my-6">{children}</div>
     </main>
   );
 };
