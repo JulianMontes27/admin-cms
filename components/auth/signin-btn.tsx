@@ -11,13 +11,7 @@ export function SignInBtn({ className }: { className: string }) {
         await signIn();
       }}
     >
-      <Button
-        variant={"ghost"}
-        className={cn(
-          "border-none flex w-full justify-start p-0 gap-2",
-          className
-        )}
-      >
+      <Button className={cn("transition hover:bg-indigo-700", className)}>
         <span>Login</span>
       </Button>
     </form>

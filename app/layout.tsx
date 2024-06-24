@@ -6,6 +6,8 @@ import "./globals.css";
 import ModalProvider from "@/providers/modal-provider";
 import { Toaster } from "react-hot-toast";
 
+import { SessionProvider } from "next-auth/react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,9 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <ModalProvider />
-        {children}
-        <Toaster />
+        <SessionProvider>
+          <ModalProvider />
+          {children}
+          <Toaster />
+        </SessionProvider>
       </body>
     </html>
   );

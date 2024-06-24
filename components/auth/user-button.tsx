@@ -1,4 +1,3 @@
-// import avatarPlaceholder from "/Users/julianmontes/Developer/admin-cms/public/avatar_placeholder.png";
 import { LogOut, Settings } from "lucide-react";
 import { User } from "next-auth";
 import Image from "next/image";
@@ -43,20 +42,13 @@ export default function UserButton({ user }: UserButtonProps) {
               <span>Settings</span>
             </Link>
           </DropdownMenuItem>
-          {/* TODO: Show this only for admins */}
-          {/* <DropdownMenuItem asChild>
-                <Link href="/admin">
-                  <Lock className="mr-2 h-4 w-4" />
-                  Admin
-                </Link>
-              </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <form
             action={async () => {
               "use server";
-              await signOut();
+              await signOut({ redirectTo: "/" });
             }}
           >
             <button className="flex w-full items-center">

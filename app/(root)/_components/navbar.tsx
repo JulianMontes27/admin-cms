@@ -58,7 +58,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-              <SignInBtn className="rounded-md bg-blue-600 px-7 py-2.5 text-sm font-medium text-white shadow" />
+              <SignInBtn className="rounded-md bg-blue-600 px-7 py-2.5 text-sm font-medium text-white" />
             </div>
 
             <div className="block md:hidden">
